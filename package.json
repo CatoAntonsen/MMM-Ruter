@@ -1,0 +1,16 @@
+{
+  "name": "mmm-ruter",
+  "version": "1.0.0",
+  "description": "The 'MMM-Temperature' module is for displaying the temperature from sensors connected to the Raspberry Pi",
+  "main": "MMM-Ruter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cato Antonsen",
+  "license": "ISC",
+  "devDependencies": {
+    "async": "^2.1.2",
+    "crypto": "0.0.3",
+    "http": "0.0.0"
+  }
+}
