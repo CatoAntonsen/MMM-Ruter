@@ -29,7 +29,7 @@ npm install
 ````
 
 Add the module to the modules array in the `config/config.js` file (you can change later when you see this works):
-```json
+```
 {
 	module: 'MMM-Ruter',
 	header: 'Ruter',
@@ -86,7 +86,7 @@ stopId | Id of stop
 platformFilter | The names of the platforms you want to see
 
 Example:
-```json
+```
 {
 	stopId: "3010972",
 	platform: [ "1", "3"]
