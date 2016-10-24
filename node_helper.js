@@ -29,6 +29,8 @@ module.exports = NodeHelper.create({
 	},
 
 	initPolling: function() {
+		var self = this;
+
 		for(var i=0; i < this.config.stops.length; i++) {
 			this.allStops.push(this.config.stops[i]);
 		}
@@ -36,7 +38,7 @@ module.exports = NodeHelper.create({
 		this.startPolling();
 		
 		setInterval(function() {
-			this.startPolling();
+			self.startPolling();
 		}, this.config.serviceReloadInterval);
 	},
 	

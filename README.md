@@ -4,7 +4,7 @@ The 'MMM-Ruter' is a module for displaying public transport information for the 
 ![Full](images/MMM-Ruter_Full.png) 
 ![Simple](images/MMM-Ruter_Simple.png)
 
-Current version is 1.0.0. See [changelog](CHANGELOG.md "Version history") for version history.
+Current version is 1.0.1 See [changelog](CHANGELOG.md "Version history") for version history.
 
 ## Installation
 
