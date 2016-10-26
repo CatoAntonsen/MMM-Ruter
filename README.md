@@ -1,8 +1,8 @@
 # MagicMirror² Module: Ruter
 'MMM-Ruter' is a module for displaying public transport information for the Oslo and Akershus region in Norway on a [MagicMirror²](https://magicmirror.builders/). It's using data from [Ruter.no](http://reisapi.ruter.no/help).
 
-![Full](images/MMM-Ruter_Full.png) 
 ![Simple](images/MMM-Ruter_Simple.png)
+![Full](images/MMM-Ruter_Full.png) 
 
 Current version is 1.0.1 See [changelog](CHANGELOG.md "Version history") for version history.
 
