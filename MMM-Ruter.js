@@ -36,7 +36,7 @@ Module.register("MMM-Ruter",{
 	},
 
 	start: function() {
-		console.log(this.translate("STARINGMODULE") + ": " + this.name);
+		console.log(this.translate("STARTINGMODULE") + ": " + this.name);
 
 		this.journeys = [];
 		this.previousTime = [];

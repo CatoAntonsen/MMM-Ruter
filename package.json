@@ -12,5 +12,8 @@
     "async": "^2.1.2",
     "crypto": "0.0.3",
     "http": "0.0.0"
+  },
+  "dependencies": {
+    "moment": "^2.15.2"
   }
 }

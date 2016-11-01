@@ -9,20 +9,18 @@ var NodeHelper = require("node_helper");
 var http = require("http");
 var async = require("async");
 var crypto = require("crypto");
-
+var moment = require("moment");
 
 module.exports = NodeHelper.create({
 	start: function() {
 		console.log("Starting module: " + this.name);
-		this.allStops = [];
-		this.lastMD5 = [];
-		this.config = null;
-
 	},
 
 	socketNotificationReceived: function(notification, config) {
 		if (notification === "CONFIG") {
 			this.config = config;
+			this.allStops = [];
+			this.lastMD5 = [];
 			this.initPolling();
 			return;
 		}
@@ -44,7 +42,7 @@ module.exports = NodeHelper.create({
 	
 	startPolling: function() {
 		var self = this;
-		
+
 		async.map(this.allStops, this.getStopInfo, function(err, result) {
 			var stops = [];
 			for(var i=0; i < result.length; i++) {
@@ -127,9 +125,18 @@ module.exports = NodeHelper.create({
 			});
 		}
 
+		var dateParam = ""
+		if (stopItem.timeToThere) {
+			console.log("Looking for journey in the funture: " + stopItem.timeToThere);
+			var min = stopItem.timeToThere;
+			dateParam = "?datetime=" + moment(moment.now()).add(min, "minute").format().substring(0, 16);
+		} else {
+			console.log("Looking for journey right now");
+		}
+		
 		var options = {
 			host: "reisapi.ruter.no",
-			path: "/StopVisit/GetDepartures/" + stopItem.stopId 
+			path: "/StopVisit/GetDepartures/" + stopItem.stopId + dateParam
 		};
 	
 		http.request(options, responseCallback).end();	
