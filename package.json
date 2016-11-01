@@ -9,11 +9,11 @@
   "author": "Cato Antonsen",
   "license": "ISC",
   "devDependencies": {
-    "async": "^2.1.2",
-    "crypto": "0.0.3",
-    "http": "0.0.0"
   },
   "dependencies": {
+    "async": "^2.1.2",
+    "crypto": "0.0.3",
+    "http": "0.0.0",
     "moment": "^2.15.2"
   }
 }
