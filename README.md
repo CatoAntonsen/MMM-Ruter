@@ -4,7 +4,7 @@
 ![Simple](images/MMM-Ruter_Simple.png)
 ![Full](images/MMM-Ruter_Full.png) 
 
-Current version is 1.0.1 See [changelog](CHANGELOG.md "Version history") for version history.
+Current version is 1.0.2 See [changelog](CHANGELOG.md "Version history") for version history.
 
 ## Installation
 
@@ -40,7 +40,8 @@ Add the module to the modules array in the `config/config.js` file by adding the
 		stops: [
 			{
 				stopId: "3010972",
-				platforms: [ ]
+				platforms: [ "1", "2" ],
+				timeToThere: 0
 			}
 		]
 	}
@@ -73,12 +74,14 @@ Stop option | Comment
 ---|---|---
 stopId | Id of stop  
 platformFilter | The names of the platforms you want to see
+timeToThere | How long time in minutes does it take for you to get to this stop? It's no point showing journeys that go in 1 minute if it takes you 5 minutes to get there...
 
 Example:
 ```
 {
 	stopId: "3010972",
-	platform: [ "1", "2"]
+	platform: [ "1", "2"],
+	timeToThere: 5
 }
 
 ``` 
