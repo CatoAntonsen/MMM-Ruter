@@ -9,15 +9,16 @@ Module.register("MMM-Ruter",{
 
 	// Default module config.
 	defaults: {
-		showHeader: false, 				// Set this to true to show header above the journeys (default is false)
-		showPlatform: false,			// Set this to true to get the names of the platforms (default is false)
-		maxItems: 5,					// Number of journeys to display (default is 5)
-		humanizeTimeTreshold: 15, 		// If time to next journey is below this value, it will be displayed as "x minutes" instead of time (default is 15 minutes)
-		serviceReloadInterval: 30000, 	// Refresh rate in MS for how often we call Ruter's web service. NB! Don't set it too low! (default is 30 seconds)
-		timeReloadInterval: 1000, 		// Refresh rate how often we check if we need to update the time shown on the mirror (default is every second)
-		animationSpeed: 1000, 			// How fast the animation changes when updating mirror (default is 1 second)
-		fade: true,						// Set this to true to fade list from light to dark. (default is true)
-		fadePoint: 0.25 				// Start on 1/4th of the list. 
+		timeFormat: 'LT',		// This is set automatically based on global config
+		showHeader: false, 		// Set this to true to show header above the journeys (default is false)
+		showPlatform: false,	// Set this to true to get the names of the platforms (default is false)
+		maxItems: 5,			// Number of journeys to display (default is 5)
+		humanizeTimeTreshold: 15, // If time to next journey is below this value, it will be displayed as "x minutes" instead of time (default is 15 minutes)
+		serviceReloadInterval: 30000, // Refresh rate in MS for how often we call Ruter's web service. NB! Don't set it too low! (default is 30 seconds)
+		timeReloadInterval: 1000, // Refresh rate how often we check if we need to update the time shown on the mirror (default is every second)
+		animationSpeed: 1000,	// How fast the animation changes when updating mirror (default is 1 second)
+		fade: true,				// Set this to true to fade list from light to dark. (default is true)
+		fadePoint: 0.25			// Start on 1/4th of the list. 
 	},
 
 	getStyles: function () {
@@ -48,6 +49,14 @@ Module.register("MMM-Ruter",{
 		setInterval(function() {
 			self.updateDomIfNeeded();
 		}, this.config.timeReloadInterval);
+
+ 		// Set locale and time format based on global config
+		moment.locale(config.language);
+		if (config.timeFormat === 24) {
+				this.config.timeFormat = 'HH:mm';
+		} else {
+				this.config.timeFormat = 'h:mm A';
+		}
 
 	},
 
@@ -169,7 +178,9 @@ Module.register("MMM-Ruter",{
 	},
 	
 	formatTime: function(t) {
-		var min = moment.duration(moment(t) - moment.now()).minutes();
+		var diff = moment.duration(moment(t) - moment.now());
+		var min = diff.minutes() + diff.hours() * 60;
+
 		if (min == 0) {
 			return this.translate("NOW")
 		} else if (min == 1) {

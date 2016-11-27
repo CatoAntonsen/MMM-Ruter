@@ -102,7 +102,7 @@ module.exports = NodeHelper.create({
 				for(var j = 0; j < stops.length; j++) {
 					var journey = stops[j].MonitoredVehicleJourney;
 					
-					if (shouldAddPlatform(journey.MonitoredCall.DeparturePlatformName, stopItem.platformFilter)) {
+					if (shouldAddPlatform(journey.MonitoredCall.DeparturePlatformName, stopItem.platforms)) {
 						var numBlockParts = null;
 						if (journey.TrainBlockPart != null) {
 							numBlockParts = journey.TrainBlockPart.NumberOfBlockParts;
