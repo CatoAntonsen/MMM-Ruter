@@ -11,26 +11,38 @@ var async = require("async");
 var crypto = require("crypto");
 var moment = require("moment");
 
+function addFieldIfNotExist(object, fieldname) {
+    if (!object.hasOwnProperty(fieldname)) {
+        object[fieldname] = {};
+	};
+    return object;
+};
+
+
 module.exports = NodeHelper.create({
 	start: function() {
 		console.log("Starting module: " + this.name);
+
+		this.config = {};
+		this.allStops = {};
+		this.lastMD5 = {};
 	},
 
 	socketNotificationReceived: function(notification, config) {
 		if (notification === "CONFIG") {
-			this.config = config;
-			this.allStops = [];
-			this.lastMD5 = [];
-			this.initPolling();
+			this.config[config.identifier] = config;
+			this.allStops[config.identifier] = [];
+			this.lastMD5[config.identifier] = [];
+			this.initPolling(config.identifier);
 			return;
 		}
 	},
 
-	initPolling: function() {
+	initPolling: function(identifier) {
 		var self = this;
 
-		for(var i=0; i < this.config.stops.length; i++) {
-			this.allStops.push(this.config.stops[i]);
+		for(var i=0; i < this.config[identifier].stops.length; i++) {
+			this.allStops[identifier].push(this.config[identifier].stops[i]);
 		}
 		
 		this.startPolling();
@@ -43,7 +55,11 @@ module.exports = NodeHelper.create({
 	startPolling: function() {
 		var self = this;
 
-		async.map(this.allStops, this.getStopInfo, function(err, result) {
+        for (var identifier in this.allStops) {
+            if (this.allStops.hasOwnProperty(identifier)) {
+
+
+		async.map(this.allStops[identifier], this.getStopInfo, function(err, result) {
 			var stops = [];
 			for(var i=0; i < result.length; i++) {
 				stops = stops.concat(result[i]);
@@ -55,12 +71,18 @@ module.exports = NodeHelper.create({
 			});
 
 			stops = stops.slice(0, self.config.maxItems);
-			
+
 			if (self.hasChanged("stops", stops)) {
 				console.log("Updating journeys to mirror");
-				self.sendSocketNotification("RUTER_UPDATE", stops);
+				var packet = {
+					stops: stops,
+					target_identifier: identifier
+				};
+				self.sendSocketNotification("RUTER_UPDATE", packet);
 			}
 		});
+			}
+		}
 	},
 	
 	hasChanged: function(key, value) {
