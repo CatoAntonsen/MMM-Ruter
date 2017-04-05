@@ -23,9 +23,10 @@ module.exports = NodeHelper.create({
 	start: function() {
 		console.log("Starting module: " + this.name);
 
-		this.config = {};
-		this.allStops = {};
-		this.lastMD5 = {};
+		this.config = {}; // config struct for each module
+		this.allStops = {}; // list of stops for each module
+		this.lastMD5 = {}; // hash of last received arrival list
+		this.poller = {}; // poll function for each module
 	},
 
 	socketNotificationReceived: function(notification, config) {
@@ -41,22 +42,24 @@ module.exports = NodeHelper.create({
 	initPolling: function(identifier) {
 		var self = this;
 
+		this.allStops[identifier]=[];
 		for(var i=0; i < this.config[identifier].stops.length; i++) {
 			this.allStops[identifier].push(this.config[identifier].stops[i]);
 		}
 		
-		this.startPolling();
-		
-		setInterval(function() {
-			self.startPolling();
-		}, this.config.serviceReloadInterval);
+		this.startPolling(identifier);
+
+		// Reset interval if defined
+
+		this.poller[identifier] = setInterval(function() {
+			self.startPolling(identifier);
+		}, this.config[identifier].serviceReloadInterval);
 	},
 	
-	startPolling: function() {
+	startPolling: function(identifier) {
 		var self = this;
 
-        for (var identifier in this.allStops) {
-            if (this.allStops.hasOwnProperty(identifier)) {
+		if (this.allStops.hasOwnProperty(identifier)) {
 
 
 		async.map(this.allStops[identifier], this.getStopInfo, function(err, result) {
@@ -70,7 +73,7 @@ module.exports = NodeHelper.create({
 				return dateA - dateB;
 			});
 
-			stops = stops.slice(0, self.config.maxItems);
+			stops = stops.slice(0, self.config[identifier].maxItems);
 
 			if (self.hasChanged("stops", stops)) {
 				console.log("Updating journeys to mirror");
@@ -82,8 +85,7 @@ module.exports = NodeHelper.create({
 			}
 		});
 			}
-		}
-	},
+		},
 	
 	hasChanged: function(key, value) {
 		var md5sum = crypto.createHash("md5");
