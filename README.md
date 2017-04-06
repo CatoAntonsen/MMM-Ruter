@@ -74,15 +74,21 @@ Stop option | Comment
 ---|---|---
 stopId | Id of stop  
 platformFilter | The names of the platforms you want to see
-timeToThere | How long time in minutes does it take for you to get to this stop? It's no point showing journeys that go in 1 minute if it takes you 5 minutes to get there...
+timeToThere | How long time in minutes does it take for you to get to this stop? It's no point showing journeys that till go in 1 minute if it takes you 5 minutes to get there...
 
 Example:
 ```
-{
-	stopId: "3010972",
-	platform: [ "1", "2"],
-	timeToThere: 5
-}
+stops: [
+	{
+		stopId: "3010972",
+		platforms: [ "1", "2" ],
+		timeToThere: 0
+	},
+	{
+		stopId: "3010910",
+		timeToThere: 15
+	},
+]
 
 ``` 
 ## Translations
