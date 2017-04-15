@@ -30,7 +30,7 @@ module.exports = NodeHelper.create({
 	},
 
 	socketNotificationReceived: function(notification, config) {
-		if (notification === "CONFIG") {
+		if (notification === "CONFIG" + config.identifier) {
 			this.config[config.identifier] = config;
 			this.allStops[config.identifier] = [];
 			this.lastMD5[config.identifier] = [];
@@ -46,9 +46,9 @@ module.exports = NodeHelper.create({
 		for(var i=0; i < this.config[identifier].stops.length; i++) {
 			this.allStops[identifier].push(this.config[identifier].stops[i]);
 		}
-		
-		this.startPolling(identifier);
 
+		self.startPolling(identifier);
+		
 		// Reset interval if defined
 
 		this.poller[identifier] = setInterval(function() {
@@ -61,31 +61,31 @@ module.exports = NodeHelper.create({
 
 		if (this.allStops.hasOwnProperty(identifier)) {
 
+			
+			async.map(this.allStops[identifier], this.getStopInfo, function(err, result) {
+				var stops = [];
+				for(var i=0; i < result.length; i++) {
+					stops = stops.concat(result[i]);
+				}
+				stops.sort(function(a,b) {
+					var dateA = new Date(a.time);
+					var dateB = new Date(b.time);
+					return dateA - dateB;
+				});
 
-		async.map(this.allStops[identifier], this.getStopInfo, function(err, result) {
-			var stops = [];
-			for(var i=0; i < result.length; i++) {
-				stops = stops.concat(result[i]);
-			}
-			stops.sort(function(a,b) {
-				var dateA = new Date(a.time);
-				var dateB = new Date(b.time);
-				return dateA - dateB;
+				stops = stops.slice(0, self.config[identifier].maxItems);
+
+				if (self.hasChanged("stops", stops)) {
+					console.log("Updating journeys to mirror");
+					var packet = {
+						stops: stops,
+						target_identifier: identifier
+					};
+					self.sendSocketNotification("RUTER_UPDATE", packet);
+				}
 			});
-
-			stops = stops.slice(0, self.config[identifier].maxItems);
-
-			if (self.hasChanged("stops", stops)) {
-				console.log("Updating journeys to mirror");
-				var packet = {
-					stops: stops,
-					target_identifier: identifier
-				};
-				self.sendSocketNotification("RUTER_UPDATE", packet);
-			}
-		});
-			}
-		},
+		}
+	},
 	
 	hasChanged: function(key, value) {
 		var md5sum = crypto.createHash("md5");

@@ -44,7 +44,7 @@ Module.register("MMM-Ruter",{
 		this.journeys = [];
 		this.previousTime = [];
 
-		this.sendSocketNotification("CONFIG", this.config);
+		this.sendSocketNotification("CONFIG"+this.config.identifier, this.config);
 		
 		var self = this;
 		
