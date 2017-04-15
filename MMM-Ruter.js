@@ -39,6 +39,8 @@ Module.register("MMM-Ruter",{
 	start: function() {
 		console.log(this.translate("STARTINGMODULE") + ": " + this.name);
 
+		this.config.identifier = this.identifier;
+
 		this.journeys = [];
 		this.previousTime = [];
 
@@ -62,7 +64,9 @@ Module.register("MMM-Ruter",{
 
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === "RUTER_UPDATE") {
-			this.journeys = payload;
+			if (payload.target_identifier == this.identifier) {
+                this.journeys = payload.stops;
+            }
 		}
 	},
 	
