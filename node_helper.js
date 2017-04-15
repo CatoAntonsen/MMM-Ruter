@@ -75,7 +75,7 @@ module.exports = NodeHelper.create({
 
 				stops = stops.slice(0, self.config[identifier].maxItems);
 
-				if (self.hasChanged("stops", stops)) {
+				if (self.hasChanged("stops"+identifier, stops)) {
 					console.log("Updating journeys to mirror");
 					var packet = {
 						stops: stops,
