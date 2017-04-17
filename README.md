@@ -61,7 +61,7 @@ showPlatform | Set this to true to get the names of the platforms. Set this to t
 humanizeTimeTreshold | If time to next journey is below this value, it will be displayed as "x minutes" instead of time | 15 
 serviceReloadInterval | Refresh rate in MS for how often we call Ruter's web service. NB! Don't set it too low! | 30000 
 timeReloadInterval | Refresh rate how often we check if we need to update the time in the GUI | 1000 
-animationSpeed | How fast the animation changes when updating mirror | 1000  
+animationSpeed | How fast the animation changes when updating mirror - in milliseconds | 0  
 fade | Set this to true to fade list from light to dark | true  
 fadePoint | Start fading on 1/4th of the list | 0.25
 
