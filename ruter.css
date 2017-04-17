@@ -2,6 +2,10 @@
 
 table.ruter { width: 100%; border: 1px;}
 
+.ruter .line {
+	padding-right: 5px;
+}
+
 .ruter .title {
   padding-left: 0;
   padding-right: 0;
