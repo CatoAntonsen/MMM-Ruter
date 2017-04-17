@@ -4,7 +4,7 @@
 ![Simple](images/MMM-Ruter_Simple.png)
 ![Full](images/MMM-Ruter_Full.png) 
 
-Current version is 1.0.2 See [changelog](CHANGELOG.md "Version history") for version history.
+Current version is 1.1.0 See [changelog](CHANGELOG.md "Version history") for version history.
 
 ## Installation
 
