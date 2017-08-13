@@ -9,16 +9,17 @@ Module.register("MMM-Ruter",{
 
 	// Default module config.
 	defaults: {
-		timeFormat: 'LT',				// This is set automatically based on global config
-		showHeader: false, 				// Set this to true to show header above the journeys (default is false)
+		timeFormat: null,			// This is set automatically based on global config
+		showHeader: false, 			// Set this to true to show header above the journeys (default is false)
 		showPlatform: false,			// Set this to true to get the names of the platforms (default is false)
-		maxItems: 5,					// Number of journeys to display (default is 5)
+		showStopName: false,			// Show the name of the stop (you have to configure 'name' for each stop)
+		maxItems: 5,				// Number of journeys to display (default is 5)
 		humanizeTimeTreshold: 15, 		// If time to next journey is below this value, it will be displayed as "x minutes" instead of time (default is 15 minutes)
-		serviceReloadInterval: 30000, 	// Refresh rate in MS for how often we call Ruter's web service. NB! Don't set it too low! (default is 30 seconds)
+		serviceReloadInterval: 30000, 		// Refresh rate in MS for how often we call Ruter's web service. NB! Don't set it too low! (default is 30 seconds)
 		timeReloadInterval: 1000, 		// Refresh rate how often we check if we need to update the time shown on the mirror (default is every second)
-		animationSpeed: 0,				// How fast the animation changes when updating mirror (default is 0 second)
-		fade: true,						// Set this to true to fade list from light to dark. (default is true)
-		fadePoint: 0.25					// Start on 1/4th of the list. 
+		animationSpeed: 0,			// How fast the animation changes when updating mirror (default is 0 second)
+		fade: true,				// Set this to true to fade list from light to dark. (default is true)
+		fadePoint: 0.25				// Start on 1/4th of the list. 
 	},
 
 	getStyles: function () {
@@ -51,7 +52,7 @@ Module.register("MMM-Ruter",{
 				this.config.timeFormat = 'h:mm A';
 		}
 
-		// Just to an initial poll. Otherwise we have to wait for the serviceReloadInterval
+		// Just do an initial poll. Otherwise we have to wait for the serviceReloadInterval
 		self.startPolling(); 
 
 		setInterval(function() {
@@ -204,6 +205,7 @@ Module.register("MMM-Ruter",{
 					}
 					allStopItems.push({
 						stopId: stopItem.stopId,
+						stopName: stopItem.stopName,
 						lineName: journey.PublishedLineName,
 						destinationName: journey.DestinationName,
 						time: journey.MonitoredCall.ExpectedDepartureTime,
@@ -228,6 +230,10 @@ Module.register("MMM-Ruter",{
 		var thPlatform = document.createElement("th");
 		thPlatform.className = "light";
 		thPlatform.appendChild(document.createTextNode(this.translate("PLATFORMHEADER")));
+
+		var thStopName = document.createElement("th");
+		thStopName.className = "light"
+		thStopName.appendChild(document.createTextNode(this.translate("STOPNAMEHEADER")));
 		
 		var thTime = document.createElement("th");
 		thTime.className = "light time"
@@ -237,6 +243,7 @@ Module.register("MMM-Ruter",{
 		thead.addClass = "xsmall dimmed";
 		thead.appendChild(thLine);
 		thead.appendChild(thDestination);
+		if (this.config.showStopName) { thead.appendChild(thStopName); }
 		if (this.config.showPlatform) { thead.appendChild(thPlatform); }
 		thead.appendChild(thTime);
 		
@@ -258,6 +265,12 @@ Module.register("MMM-Ruter",{
 			tdPlatform.className = "platform";
 			tdPlatform.appendChild(document.createTextNode(journey.platform));
 		}
+
+		if (this.config.showStopName) {
+			var tdStopName = document.createElement("td");
+			tdStopName.className = "light";
+			tdStopName.appendChild(document.createTextNode(journey.stopName));	
+		}
 		
 		var tdTime = document.createElement("td");
 		tdTime.className = "time light";
@@ -266,6 +279,7 @@ Module.register("MMM-Ruter",{
 		var tr = document.createElement("tr");
 		tr.appendChild(tdLine);
 		tr.appendChild(tdDestination);
+		if (this.config.showStopName) { tr.appendChild(tdStopName); }
 		if (this.config.showPlatform) { tr.appendChild(tdPlatform); }
 		tr.appendChild(tdTime);
 		
@@ -283,7 +297,7 @@ Module.register("MMM-Ruter",{
 		} else if (min < this.config.humanizeTimeTreshold) {
 			return min + " " + this.translate("MINUTES");
 		} else {
-			return moment(t).format("LT");
+			return moment(t).format(this.config.timeFormat);
 		}
 	}
 });

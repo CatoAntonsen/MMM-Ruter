@@ -4,7 +4,7 @@
 ![Simple](images/MMM-Ruter_Simple.png)
 ![Full](images/MMM-Ruter_Full.png) 
 
-Current version is 1.1.0 See [changelog](CHANGELOG.md "Version history") for version history.
+Current version is 1.2.0 See [changelog](CHANGELOG.md "Version history") for version history.
 
 ## Installation
 
@@ -57,6 +57,7 @@ Configuration option | Comment | Default
 stops | Array of stops. See below | Empty array
 maxItems | Number of journeys to display | 5 
 showHeader | Set this to true to show header above the journeys | false
+showStopName | Display custom stop name for each stop. Remember to add `stopName` to all stops (See below) | false
 showPlatform | Set this to true to get the names of the platforms. Set this to true to check the name of the platform if you need to filter  | false
 humanizeTimeTreshold | If time to next journey is below this value, it will be displayed as "x minutes" instead of time | 15 
 serviceReloadInterval | Refresh rate in MS for how often we call Ruter's web service. NB! Don't set it too low! | 30000 
@@ -73,6 +74,7 @@ Notice that you can only use stops, not addresses or areas. You can test if it i
 Stop option | Comment  
 ---|---|---
 stopId | Id of stop  
+stopName | Your name of the stop. Try keep it short 
 platformFilter | The names of the platforms you want to see
 timeToThere | How long time in minutes does it take for you to get to this stop? It's no point showing journeys that till go in 1 minute if it takes you 5 minutes to get there...
 

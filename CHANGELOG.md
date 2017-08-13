@@ -1,5 +1,9 @@
 #MMM-Ruter Change Log
 
+## [1.2.0] - 2017-08-13
+- Added the option to display a custom stop name in the list. New module config value: `showStopName` and new stop config value: `stopName`. See [documentation](README.md "MMM-Ruter Documentation") for more information.
+- Fixed time format
+
 ## [1.1.0] - 2017-04-17
 
 - Now it's possible to add multiple instances of the module
