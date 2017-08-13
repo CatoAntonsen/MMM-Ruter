@@ -7,5 +7,6 @@
 	"LINEHEADER":			"Line",
 	"DESTINATIONHEADER":	"Destination",
 	"PLATFORMHEADER":		"Platform",
+	"STOPNAMEHEADER":		"From",
 	"TIMEHEADER":			"Time"
 }

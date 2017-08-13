@@ -5,7 +5,8 @@
 	"1MIN":					"1 minutt",
 	"MINUTES":				"minutter",
 	"LINEHEADER":			"Linje",
-	"DESTINATIONHEADER":	"Destinasjon",
+	"STOPNAMEHEADER":		"Fra",
+	"DESTINATIONHEADER":	"Til",
 	"PLATFORMHEADER":		"Plattform",
 	"TIMEHEADER":			"Tid"
 }
