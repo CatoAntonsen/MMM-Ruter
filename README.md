@@ -72,11 +72,11 @@ You have to configure at least one stop. The module is using the same stop ID's 
 
 Notice that you can only use stops, not addresses or areas. You can test if it is a valid stop by enter the following URL in your browser http://reisapi.ruter.no/StopVisit/GetDepartures/`NNNNNN` (replace `NNNNNN` with your id).
 
-Stop option | Comment  
----|---|---
+Stop option | Comment 
+---|---
 stopId | Id of stop  
-stopName | Your name of the stop. Try keep it short 
-platformFilter | The names of the platforms you want to see
+stopName | Override name of the stop if you know it by another name or want to keep it short. You have to enable `showStopName` in module configuration. 
+platformFilter | The names of the platforms you want to see. Please temporarely enable `showPlatformName` in the module configuration to get correct names. If these names aren't valid, nothing will be displayed.
 timeToThere | How long time in minutes does it take for you to get to this stop? It's no point showing journeys that till go in 1 minute if it takes you 5 minutes to get there...
 
 Example:
@@ -84,13 +84,13 @@ Example:
 stops: [
 	{
 		stopId: "3010972",
-		platforms: [ "1", "2" ],
-		timeToThere: 0
+		platforms: [ "1", "2" ]
 	},
 	{
 		stopId: "3010910",
-		timeToThere: 15
-	},
+		timeToThere: 15,
+		stopName: "Mitt stopp"
+	}
 ]
 
 ``` 
