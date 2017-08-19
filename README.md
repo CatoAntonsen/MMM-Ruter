@@ -68,9 +68,9 @@ fade | Set this to true to fade list from light to dark | true
 fadePoint | Start fading on 1/4th of the list | 0.25
 
 ## Stops
-You have to configure at least one stop. The module is using the same stop ID's as Ruter does in it's API. The simplest way to find those are to go to [https://ruter.no](https://ruter.no) in your browser and do a search _from_ your stop to somewhere/anywhere. Then extract `NNNNNN` from the resulting URL: https://ruter.no/reiseplanlegger/Mellom/Fra/(`NNNNNN`)*. 
+You have to configure at least one stop. The module is using the same stop ID's as Ruter does in it's API. The simplest way to find those are to go to [https://ruter.no](https://ruter.no) in your browser and do a search _from_ your stop to somewhere/anywhere. Then extract `NNNNNN` from the resulting URL: https://ruter.no/reiseplanlegger/Mellom/Fra/(NNNNNN)*. 
 
-Notice that you can only use stops, not addresses or areas. You can test if it is a valid stop by enter the following URL in your browser http://reisapi.ruter.no/StopVisit/GetDepartures/`NNNNNN` (replace `NNNNNN` with your id).
+Notice that you can only use stops, not addresses or areas. You can test if it is a valid stop by enter the following URL in your browser http://reisapi.ruter.no/StopVisit/GetDepartures/NNNNNN (replace NNNNNN with your id).
 
 Stop option | Comment 
 ---|---
