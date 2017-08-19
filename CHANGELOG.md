@@ -1,5 +1,8 @@
 #MMM-Ruter Change Log
 
+## [1.3.0] - 2017-08-19
+- The name of the stop will now automatically be fetched if you set `showStopName`. But you can still override it with the stop config value: `stopName`. See [documentation](README.md "MMM-Ruter Documentation") for more information.
+
 ## [1.2.0] - 2017-08-13
 - Added the option to display a custom stop name in the list. New module config value: `showStopName` and new stop config value: `stopName`. See [documentation](README.md "MMM-Ruter Documentation") for more information.
 - Fixed time format

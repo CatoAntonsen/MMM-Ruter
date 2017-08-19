@@ -154,6 +154,8 @@ Module.register("MMM-Ruter",{
 	},
 
 	getStopInfo: function(stopItem, callback) {
+		var self = this;
+
 		var HttpClient = function() {
 			this.get = function(requestUrl, requestCallback) {
 				var httpRequest = new XMLHttpRequest();
@@ -176,46 +178,64 @@ Module.register("MMM-Ruter",{
 			return false;
 		};
 
-		var dateParam = ""
-		if (stopItem.timeToThere) {
-			var min = stopItem.timeToThere;
-			var timeAhead = moment(moment.now()).add(min, "minute").format().substring(0, 16);
-			console.log("Looking for journeys " + min + " minutes ahead in time.");
-			dateParam = "?datetime=" + timeAhead;
-		} else {
-			console.log("Looking for current journeys");
-		}
-		
-		var url = "http://reisapi.ruter.no/StopVisit/GetDepartures/" + stopItem.stopId + dateParam;
-		
+		var departureUrl = function() {
+			var dateParam = ""
+			if (stopItem.timeToThere) {
+				var min = stopItem.timeToThere;
+				var timeAhead = moment(moment.now()).add(min, "minute").format().substring(0, 16);
+				console.log("Looking for journeys " + min + " minutes ahead in time.");
+				dateParam = "?datetime=" + timeAhead;
+			} else {
+				console.log("Looking for current journeys");
+			}
+			
+			return "http://reisapi.ruter.no/StopVisit/GetDepartures/" + stopItem.stopId + dateParam;
+		};
+
+		var stopUrl = function() {
+			return "http://reisapi.ruter.no/Place/GetStop/" + stopItem.stopId;
+		};
+
 		var client = new HttpClient();
 
-		client.get(url, function(response) {
-			var stops = JSON.parse(response);
+		client.get(stopUrl(), function(stopResponse) {
+			var stop = JSON.parse(stopResponse);
 
-			var allStopItems = new Array();
+			client.get(departureUrl(), function(response) {
+				var stops = JSON.parse(response);
+	
+				var allStopItems = new Array();
+	
+				for(var j = 0; j < stops.length; j++) {
+					var journey = stops[j].MonitoredVehicleJourney;
+					
+					if (shouldAddPlatform(journey.MonitoredCall.DeparturePlatformName, stopItem.platforms)) {
+						var numBlockParts = null;
+						if (journey.TrainBlockPart != null) {
+							numBlockParts = journey.TrainBlockPart.NumberOfBlockParts;
+						}
 
-			for(var j = 0; j < stops.length; j++) {
-				var journey = stops[j].MonitoredVehicleJourney;
-				
-				if (shouldAddPlatform(journey.MonitoredCall.DeparturePlatformName, stopItem.platforms)) {
-					var numBlockParts = null;
-					if (journey.TrainBlockPart != null) {
-						numBlockParts = journey.TrainBlockPart.NumberOfBlockParts;
+						var stopName = stopItem.stopName ? stopItem.stopName : stop.Name;
+						if (self.config.maxNameLength) {
+							stopName = stopName.substring(0, self.config.maxNameLength);
+						}
+
+						stopName = "STOPP NAVN KOMMER HER SNART KANSKJE";
+
+						allStopItems.push({
+							stopId: stopItem.stopId,
+							stopName: stopName,
+							lineName: journey.PublishedLineName,
+							destinationName: journey.DestinationName,
+							time: journey.MonitoredCall.ExpectedDepartureTime,
+							platform: journey.MonitoredCall.DeparturePlatformName
+						});
 					}
-					allStopItems.push({
-						stopId: stopItem.stopId,
-						stopName: stopItem.stopName,
-						lineName: journey.PublishedLineName,
-						destinationName: journey.DestinationName,
-						time: journey.MonitoredCall.ExpectedDepartureTime,
-						platform: journey.MonitoredCall.DeparturePlatformName
-					});
-				}
-			};
-
-			callback(null, allStopItems)		
-		});
+				};
+	
+				callback(null, allStopItems)		
+			});
+		})
 	},
 	
 	getTableHeaderRow: function() {
