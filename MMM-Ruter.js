@@ -220,8 +220,6 @@ Module.register("MMM-Ruter",{
 							stopName = stopName.substring(0, self.config.maxNameLength);
 						}
 
-						stopName = "STOPP NAVN KOMMER HER SNART KANSKJE";
-
 						allStopItems.push({
 							stopId: stopItem.stopId,
 							stopName: stopName,
