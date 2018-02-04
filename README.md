@@ -78,6 +78,7 @@ stopId | Id of stop
 stopName | Override name of the stop if you know it by another name or want to keep it short. You have to enable `showStopName` in module configuration. 
 platformFilter | The names of the platforms you want to see. Please temporarely enable `showPlatformName` in the module configuration to get the correct platform names before you configure this option. If these names aren't valid, nothing will be displayed.
 timeToThere | How long time in minutes does it take for you to get to this stop? It's no point showing journeys that till go in 1 minute if it takes you 5 minutes to get there...
+lineNames | List the lines relevant to you. Example: `lineNames: ["17", "31"]` will only show line 17 and line 31.
 
 Example:
 ```

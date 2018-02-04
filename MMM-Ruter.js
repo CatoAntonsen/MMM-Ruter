@@ -73,12 +73,27 @@ Module.register("MMM-Ruter",{
 			if (this.config.showHeader) {
 				table.appendChild(this.getTableHeaderRow());
 			}
-			
+
+			var shouldAddLine = function (journey, stops) {
+				for (var i = 0; i < stops.length; i++) {
+					if(stops[i].stopId == journey.stopId) {
+						if(stops[i].lineNames === undefined) { return true };
+						if(stops[i].lineNames.indexOf(journey.lineName) != -1) {
+							return true
+						} else { return false }
+					} else { return false }
+				}
+
+			};
+
 			for(var i = 0; i < this.journeys.length; i++) {
 
 				var journey = this.journeys[i];
 				var tr = this.getTableRow(journey);
 				
+				if(!shouldAddLine(journey, this.config.stops)){
+					continue;
+				}
 				// Create fade effect. <-- stolen from default "calendar" module
 				if (this.config.fade && this.config.fadePoint < 1) {
 					if (this.config.fadePoint < 0) {
