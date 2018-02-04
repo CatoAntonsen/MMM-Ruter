@@ -4,7 +4,7 @@
  * By Cato Antonsen (https://github.com/CatoAntonsen)
  * MIT Licensed.
  */
-
+ 
 Module.register("MMM-Ruter",{
 
 	// Default module config.
@@ -19,7 +19,7 @@ Module.register("MMM-Ruter",{
 		timeReloadInterval: 1000, 		// Refresh rate how often we check if we need to update the time shown on the mirror (default is every second)
 		animationSpeed: 0,			// How fast the animation changes when updating mirror (default is 0 second)
 		fade: true,				// Set this to true to fade list from light to dark. (default is true)
-		fadePoint: 0.25				// Start on 1/4th of the list.
+		fadePoint: 0.25				// Start on 1/4th of the list. 
 	},
 
 	getStyles: function () {
@@ -44,32 +44,32 @@ Module.register("MMM-Ruter",{
 		this.previousJourneys = [];
 		var self = this;
 
-		// Set locale and time format based on global config
+ 		// Set locale and time format based on global config
 		moment.locale(config.language);
 		if (config.timeFormat === 24) {
-			this.config.timeFormat = 'HH:mm';
+				this.config.timeFormat = 'HH:mm';
 		} else {
-			this.config.timeFormat = 'h:mm A';
+				this.config.timeFormat = 'h:mm A';
 		}
 
 		// Just do an initial poll. Otherwise we have to wait for the serviceReloadInterval
-		self.startPolling();
+		self.startPolling(); 
 
 		setInterval(function() {
 			self.startPolling();
 		}, this.config.serviceReloadInterval);
-
+		
 		setInterval(function() {
 			self.updateDomIfNeeded();
 		}, this.config.timeReloadInterval);
 	},
-
+	
 	getDom: function() {
 		if (this.journeys.length > 0) {
-
+			
 			var table = document.createElement("table");
 			table.className = "ruter small";
-
+			
 			if (this.config.showHeader) {
 				table.appendChild(this.getTableHeaderRow());
 			}
@@ -106,10 +106,10 @@ Module.register("MMM-Ruter",{
 						tr.style.opacity = 1 - (1 / steps * currentStep);
 					}
 				}
-
+				
 				table.appendChild(tr);
 			}
-
+			
 			return table;
 		} else {
 			var wrapper = document.createElement("div");
@@ -131,14 +131,14 @@ Module.register("MMM-Ruter",{
 				});
 			}));
 		}
-
+		
 		Promise.all(promises).then(function(promiseResults) {
 			if (promiseResults.length > 0) {
 				var allJourneys = [];
 				for(var i=0; i < promiseResults.length; i++) {
 					allJourneys = allJourneys.concat(promiseResults[i])
 				}
-
+				
 				allJourneys.sort(function(a,b) {
 					var dateA = new Date(a.time);
 					var dateB = new Date(b.time);
@@ -149,12 +149,12 @@ Module.register("MMM-Ruter",{
 			}
 		});
 	},
-
+	
 	updateDomIfNeeded: function() {
 		var needUpdate = false;
-
+		
 		for(var i=0; i < this.journeys.length; i++)  {
-			var time = this.formatTime(this.journeys[i].time);
+			var time = this.formatTime(this.journeys[i].time);	
 			if (this.previousJourneys[i] == undefined || this.previousJourneys[i].lineName != this.journeys[i].lineName || this.previousJourneys[i].time != time) {
 				needUpdate = true;
 				this.previousJourneys[i] = {};
@@ -162,7 +162,7 @@ Module.register("MMM-Ruter",{
 				this.previousJourneys[i].time = time;
 			}
 		}
-
+		
 		if (needUpdate) {
 			this.updateDom(this.config.animationSpeed);
 		}
